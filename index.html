@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olujumoke — Customer Support & Virtual Assistant Expert</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1b2a;
+  --navy2: #1a2e44;
+  --ivory: #faf8f4;
+  --ivory2: #f0ece3;
+  --gold: #c9974a;
+  --gold2: #e8b96a;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --border: rgba(201,151,74,0.18);
+  --white: #ffffff;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body { background: var(--ivory); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+/* LOADER */
+#loader {
+  position: fixed; inset: 0; background: var(--navy); z-index: 9999;
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 24px;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#loader.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+.l-logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--ivory); letter-spacing: 0.08em; }
+.l-logo span { color: var(--gold); }
+.l-bar { width: 120px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; }
+.l-fill { height: 100%; background: var(--gold); width: 0; transition: width 0.05s linear; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 24px 60px; display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.4s ease;
+}
+nav.scrolled {
+  background: rgba(250, 248, 244, 0.96); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); padding: 16px 60px;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600;
+  color: var(--navy); text-decoration: none; letter-spacing: 0.04em;
+}
+.nav-logo em { color: var(--gold); font-style: italic; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  color: var(--muted); text-decoration: none; font-size: 0.78rem; font-weight: 400;
+  letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--navy); }
+.nav-cta {
+  padding: 10px 26px; background: var(--navy); color: var(--ivory);
+  font-family: 'DM Sans', sans-serif; font-size: 0.78rem; letter-spacing: 0.06em;
+  text-decoration: none; font-weight: 500; transition: all 0.3s; border: 1px solid var(--navy);
+}
+.nav-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--white); }
+.burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+.burger span { width: 22px; height: 1.5px; background: var(--navy); display: block; transition: all 0.3s; }
+
+/* MOBILE MENU */
+.mmenu {
+  display: none; position: fixed; inset: 0; background: var(--navy); z-index: 200;
+  flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+}
+.mmenu.open { display: flex; }
+.mmenu a {
+  font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600;
+  color: var(--ivory); text-decoration: none; transition: color 0.3s; letter-spacing: 0.04em;
+}
+.mmenu a:hover { color: var(--gold); }
+.mclose {
+  position: absolute; top: 24px; right: 28px; background: none; border: none;
+  color: var(--muted); font-size: 1.6rem; cursor: pointer;
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh; background: var(--navy);
+  display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+  position: relative; overflow: hidden;
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image: repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%);
+  background-size: 24px 24px;
+}
+.hero-left {
+  padding: 120px 60px 80px 80px; position: relative; z-index: 1;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(201,151,74,0.1); border: 1px solid rgba(201,151,74,0.3);
+  padding: 6px 16px; margin-bottom: 36px;
+  opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+}
+.tag-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+.tag-txt { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold2); }
+.hero-name {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(3.2rem, 5vw, 5.2rem);
+  font-weight: 600; color: var(--ivory); line-height: 1.05; letter-spacing: -0.01em;
+  margin-bottom: 8px; opacity: 0; animation: fadeUp 0.7s 0.7s forwards;
+}
+.hero-name em { font-style: italic; color: var(--gold); }
+.hero-role {
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(250,248,244,0.4); margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.7s 0.9s forwards;
+}
+.hero-desc {
+  font-size: 1rem; line-height: 1.85; color: rgba(250,248,244,0.65);
+  max-width: 420px; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 0.7s 1.1s forwards;
+}
+.hero-btns {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.7s 1.3s forwards;
+}
+.btn-primary {
+  padding: 15px 36px; background: var(--gold); color: var(--white);
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
+  letter-spacing: 0.06em; text-decoration: none; transition: all 0.3s;
+  border: 1px solid var(--gold); display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { background: var(--gold2); border-color: var(--gold2); transform: translateY(-2px); }
+.btn-outline {
+  padding: 15px 36px; background: transparent; color: var(--ivory);
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 400;
+  letter-spacing: 0.06em; text-decoration: none; transition: all 0.3s;
+  border: 1px solid rgba(250,248,244,0.2); display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 56px; padding-top: 48px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  opacity: 0; animation: fadeUp 0.7s 1.5s forwards;
+}
+.hstat-n {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 600;
+  color: var(--gold); line-height: 1; margin-bottom: 4px;
+}
+.hstat-l { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(250,248,244,0.4); }
+
+/* HERO RIGHT - decorative */
+.hero-right {
+  position: relative; height: 100%; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.02); border-left: 1px solid rgba(255,255,255,0.05);
+}
+.hero-card-wrap {
+  position: relative; opacity: 0; animation: fadeIn 1s 1s forwards;
+}
+.profile-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(201,151,74,0.2);
+  padding: 48px 40px; text-align: center; backdrop-filter: blur(10px);
+  position: relative; width: 320px;
+}
+.profile-avatar {
+  width: 110px; height: 110px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--navy2));
+  margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 600;
+  color: var(--ivory); border: 3px solid rgba(201,151,74,0.3); position: relative;
+}
+.avatar-ring {
+  position: absolute; inset: -8px; border-radius: 50%;
+  border: 1px solid rgba(201,151,74,0.2); animation: spin 12s linear infinite;
+}
+.avatar-ring::before {
+  content: ''; position: absolute; top: -3px; left: 50%; width: 6px; height: 6px;
+  background: var(--gold); border-radius: 50%; transform: translateX(-50%);
+}
+.profile-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--ivory); margin-bottom: 4px; }
+.profile-title { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 28px; }
+.profile-skills { display: flex; flex-direction: column; gap: 10px; text-align: left; margin-bottom: 28px; }
+.skill-row { display: flex; justify-content: space-between; align-items: center; }
+.skill-name { font-size: 0.72rem; color: rgba(250,248,244,0.6); }
+.skill-dots { display: flex; gap: 4px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.dot.filled { background: var(--gold); }
+.profile-avail {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;
+  background: rgba(0,200,100,0.08); border: 1px solid rgba(0,200,100,0.2); width: 100%;
+  justify-content: center;
+}
+.avail-dot { width: 7px; height: 7px; background: #22c55e; border-radius: 50%; animation: pulse 1.5s infinite; }
+.avail-txt { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: #86efac; }
+
+/* Floating badges */
+.float-badge {
+  position: absolute; background: rgba(13,27,42,0.9); border: 1px solid rgba(201,151,74,0.25);
+  backdrop-filter: blur(12px); padding: 12px 16px;
+  font-size: 0.7rem; color: var(--ivory2); white-space: nowrap;
+  animation: float 4s ease-in-out infinite;
+}
+.float-badge strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--gold); margin-bottom: 2px; }
+.fb1 { top: 20%; right: -60px; animation-delay: 0s; }
+.fb2 { bottom: 28%; left: -70px; animation-delay: 1.5s; }
+
+/* SECTION COMMON */
+section { position: relative; }
+.s-wrap { max-width: 1200px; margin: 0 auto; }
+.s-label { font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 14px; }
+.s-title {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; color: var(--navy);
+}
+.s-title em { font-style: italic; color: var(--gold); }
+.s-line { width: 48px; height: 2px; background: linear-gradient(to right, var(--gold), transparent); margin-top: 16px; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.on { opacity: 1; transform: translateY(0); }
+
+/* SERVICES */
+#services { padding: 120px 60px; background: var(--ivory); }
+.srv-intro { max-width: 560px; margin-bottom: 72px; }
+.srv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.srv-card {
+  background: var(--ivory); padding: 40px 36px;
+  transition: background 0.3s, transform 0.3s; position: relative; overflow: hidden;
+}
+.srv-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+}
+.srv-card:hover { background: var(--white); }
+.srv-card:hover::after { transform: scaleX(1); }
+.srv-num { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 600; color: rgba(201,151,74,0.15); line-height: 1; margin-bottom: 16px; }
+.srv-ico { font-size: 1.6rem; margin-bottom: 14px; display: block; }
+.srv-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; color: var(--navy); margin-bottom: 10px; }
+.srv-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
+.srv-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+.srv-tag { padding: 4px 10px; background: var(--ivory2); font-size: 0.62rem; letter-spacing: 0.08em; color: var(--muted); }
+
+/* SKILLS */
+#skills { padding: 120px 60px; background: var(--navy); }
+#skills .s-title { color: var(--ivory); }
+#skills .s-label { color: var(--gold); }
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 64px; align-items: start; }
+.skill-group-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--ivory); margin-bottom: 28px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sk-item { margin-bottom: 22px; }
+.sk-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.sk-name { font-size: 0.78rem; color: rgba(250,248,244,0.7); font-weight: 400; }
+.sk-pct { font-size: 0.72rem; color: var(--gold); font-family: 'Cormorant Garamond', serif; }
+.sk-track { height: 1px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden; }
+.sk-fill { height: 100%; background: linear-gradient(to right, var(--gold), var(--gold2)); transform-origin: left; transform: scaleX(0); transition: transform 1.2s cubic-bezier(0.23,1,0.32,1); }
+.sk-fill.on { transform: scaleX(1); }
+.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.05); margin-top: 64px; border: 1px solid rgba(255,255,255,0.05); }
+.tool-item {
+  background: rgba(255,255,255,0.02); padding: 24px 20px; text-align: center;
+  transition: background 0.3s;
+}
+.tool-item:hover { background: rgba(201,151,74,0.06); }
+.tool-ico { font-size: 1.4rem; margin-bottom: 8px; }
+.tool-name { font-size: 0.72rem; color: rgba(250,248,244,0.6); letter-spacing: 0.06em; }
+
+/* EXPERIENCE */
+#experience { padding: 120px 60px; background: var(--ivory2); }
+.exp-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-top: 64px; align-items: start; }
+.exp-sidebar { position: sticky; top: 100px; }
+.exp-tagline {
+  font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-style: italic;
+  color: var(--muted); line-height: 1.4; margin-bottom: 32px;
+}
+.exp-cert { background: var(--white); border: 1px solid var(--border); padding: 20px; margin-top: 24px; }
+.cert-lbl { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.cert-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--navy); }
+.tl-item {
+  position: relative; padding-left: 28px; margin-bottom: 48px;
+  border-left: 1px solid var(--border); opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.tl-item.on { opacity: 1; transform: translateY(0); }
+.tl-dot {
+  position: absolute; left: -5px; top: 6px; width: 9px; height: 9px;
+  background: var(--gold); border-radius: 50%; border: 2px solid var(--ivory2);
+}
+.tl-period { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.tl-role { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.tl-co { font-size: 0.78rem; color: var(--muted); margin-bottom: 14px; }
+.tl-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.85; margin-bottom: 16px; }
+.tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.tl-bullets li { font-size: 0.78rem; color: var(--muted); padding-left: 16px; position: relative; }
+.tl-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
+
+/* TESTIMONIALS */
+#testimonials { padding: 120px 60px; background: var(--white); }
+.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 64px; }
+.testi-card {
+  padding: 36px 32px; border: 1px solid var(--border); position: relative;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.testi-card:hover { box-shadow: 0 20px 50px rgba(0,0,0,0.07); transform: translateY(-4px); }
+.testi-quote { font-size: 3rem; color: var(--gold); opacity: 0.3; font-family: 'Cormorant Garamond', serif; line-height: 1; margin-bottom: 16px; }
+.testi-text { font-family: 'Instrument Serif', serif; font-size: 1rem; font-style: italic; color: var(--text); line-height: 1.8; margin-bottom: 24px; }
+.testi-author { display: flex; align-items: center; gap: 14px; }
+.testi-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--ivory);
+  flex-shrink: 0;
+}
+.testi-name { font-size: 0.78rem; font-weight: 500; color: var(--navy); margin-bottom: 2px; }
+.testi-pos { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.06em; }
+.stars { color: var(--gold); font-size: 0.8rem; margin-bottom: 16px; letter-spacing: 2px; }
+
+/* WHY ME */
+#whyme { padding: 120px 60px; background: var(--navy); }
+#whyme .s-title { color: var(--ivory); }
+.wm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.05); margin-top: 64px; border: 1px solid rgba(255,255,255,0.05); }
+.wm-card {
+  background: transparent; padding: 40px 28px;
+  transition: background 0.3s; position: relative; overflow: hidden;
+}
+.wm-card:hover { background: rgba(201,151,74,0.05); }
+.wm-icon { font-size: 1.8rem; margin-bottom: 16px; display: block; }
+.wm-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; color: var(--ivory); margin-bottom: 10px; }
+.wm-desc { font-size: 0.76rem; color: rgba(250,248,244,0.45); line-height: 1.85; }
+
+/* CONTACT */
+#contact { padding: 120px 60px; background: var(--ivory); }
+.ct-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; max-width: 1100px; margin: 64px auto 0; }
+.ct-info-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; color: var(--navy); margin-bottom: 16px; }
+.ct-info-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.9; margin-bottom: 36px; }
+.ct-detail { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.ct-ico { width: 38px; height: 38px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.ct-val { font-size: 0.8rem; color: var(--navy); font-weight: 400; }
+.ct-val a { color: var(--navy); text-decoration: none; }
+.ct-val a:hover { color: var(--gold); }
+.ct-socials { display: flex; gap: 12px; margin-top: 36px; }
+.ct-social {
+  width: 40px; height: 40px; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+  color: var(--muted); text-decoration: none; transition: all 0.3s;
+}
+.ct-social:hover { background: var(--navy); color: var(--ivory); border-color: var(--navy); }
+
+/* FORM */
+.ct-form { display: flex; flex-direction: column; gap: 18px; }
+.fg { display: flex; flex-direction: column; gap: 6px; }
+.fg label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.fg input, .fg textarea, .fg select {
+  background: var(--white); border: 1px solid var(--border); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; padding: 13px 16px;
+  outline: none; transition: border-color 0.3s; resize: none; appearance: none;
+}
+.fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--gold); }
+.fg textarea { height: 130px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.submit-btn {
+  padding: 16px 36px; background: var(--navy); color: var(--ivory);
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
+  letter-spacing: 0.08em; border: 1px solid var(--navy); cursor: pointer;
+  transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+}
+.submit-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--white); }
+
+/* FOOTER */
+footer { background: var(--navy); padding: 60px; border-top: 1px solid rgba(255,255,255,0.05); }
+.ft-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.ft-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; color: var(--ivory); letter-spacing: 0.04em; }
+.ft-logo em { color: var(--gold); font-style: italic; }
+.ft-copy { font-size: 0.72rem; color: rgba(250,248,244,0.3); letter-spacing: 0.06em; }
+.ft-links { display: flex; gap: 24px; }
+.ft-links a { font-size: 0.72rem; color: rgba(250,248,244,0.4); text-decoration: none; letter-spacing: 0.06em; transition: color 0.3s; }
+.ft-links a:hover { color: var(--gold); }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* RESPONSIVE */
+@media(max-width: 1100px) {
+  nav { padding: 20px 32px; }
+  nav.scrolled { padding: 14px 32px; }
+  #hero { padding: 0; }
+  .hero-left { padding: 100px 40px 60px; }
+  #services, #skills, #experience, #testimonials, #whyme, #contact { padding: 90px 32px; }
+  .srv-grid { grid-template-columns: repeat(2, 1fr); }
+  .wm-grid { grid-template-columns: repeat(2, 1fr); }
+  .testi-grid { grid-template-columns: repeat(2, 1fr); }
+  footer { padding: 48px 32px; }
+}
+
+@media(max-width: 900px) {
+  nav { padding: 16px 24px; }
+  nav.scrolled { padding: 12px 24px; }
+  .nav-links, .nav-cta { display: none; }
+  .burger { display: flex; }
+  #hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { padding: 110px 24px 60px; }
+  .hero-right { display: none; }
+  .hero-stats { gap: 24px; }
+  .hero-btns { flex-direction: column; }
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+  #services, #skills, #experience, #testimonials, #whyme, #contact { padding: 72px 24px; }
+  .srv-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; gap: 48px; }
+  .exp-grid { grid-template-columns: 1fr; gap: 48px; }
+  .exp-sidebar { position: relative; top: 0; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .wm-grid { grid-template-columns: repeat(2, 1fr); }
+  .ct-wrap { grid-template-columns: 1fr; gap: 48px; }
+  .tools-grid { grid-template-columns: repeat(2, 1fr); }
+  footer { padding: 40px 24px; }
+  .ft-inner { flex-direction: column; gap: 20px; text-align: center; }
+  .ft-links { flex-wrap: wrap; justify-content: center; }
+  .form-row { grid-template-columns: 1fr; }
+}
+
+@media(max-width: 480px) {
+  .hero-stats { flex-wrap: wrap; gap: 16px; }
+  .wm-grid { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: repeat(3, 1fr); }
+  .srv-grid { grid-template-columns: 1fr; }
+  .fg input, .fg textarea, .fg select { font-size: 16px; }
+  footer { padding: 32px 16px; }
+  #services, #skills, #experience, #testimonials, #whyme, #contact { padding: 60px 16px; }
+}
+
+@media(hover: none) {
+  .float-badge { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="l-logo">Olu<span>jumoke</span></div>
+  <div class="l-bar"><div class="l-fill" id="lfill"></div></div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mmenu" id="mmenu">
+  <button class="mclose" id="mclose">✕</button>
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#skills" onclick="closeMenu()">Skills</a>
+  <a href="#experience" onclick="closeMenu()">Experience</a>
+  <a href="#testimonials" onclick="closeMenu()">Reviews</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Olu<em>jumoke</em></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book a Call →</a>
+  <button class="burger" id="burger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-left">
+    <div class="hero-tag"><span class="tag-dot"></span><span class="tag-txt">Available for New Clients</span></div>
+    <h1 class="hero-name">Olujumoke<br><em>Olatunji</em></h1>
+    <p class="hero-role">Customer Support Expert &nbsp;·&nbsp; Virtual Assistant</p>
+    <p class="hero-desc">With 3 years of hands-on experience, I help businesses deliver exceptional customer experiences and streamlined operations — so you can focus on what matters most.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">📅 Book a Free Call</a>
+      <a href="#services" class="btn-outline">View My Services →</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hstat-n">3+</div>
+        <div class="hstat-l">Years Experience</div>
+      </div>
+      <div>
+        <div class="hstat-n">50+</div>
+        <div class="hstat-l">Happy Clients</div>
+      </div>
+      <div>
+        <div class="hstat-n">98%</div>
+        <div class="hstat-l">Satisfaction Rate</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-card-wrap">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          OA
+          <div class="avatar-ring"></div>
+        </div>
+        <div class="profile-name">Olujumoke O.</div>
+        <div class="profile-title">Customer Support &amp; VA Expert</div>
+        <div class="profile-skills">
+          <div class="skill-row">
+            <span class="skill-name">Customer Support</span>
+            <div class="skill-dots">
+              <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+            </div>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">Email Management</span>
+            <div class="skill-dots">
+              <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+            </div>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">CRM Systems</span>
+            <div class="skill-dots">
+              <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div>
+            </div>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">Data Entry</span>
+            <div class="skill-dots">
+              <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div>
+            </div>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">Calendar Management</span>
+            <div class="skill-dots">
+              <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+            </div>
+          </div>
+        </div>
+        <div class="skill-row">
+            <span class="skill-name">Vitual Assiatance</span>
+            <div class="skill-dots">
+              <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+            </div>
+          </div>
+        </div>
+        <div class="profile-avail">
+          <div class="avail-dot"></div>
+          <span class="avail-txt">Open to Work — Remote</span>
+        </div>
+      </div>
+      <div class="float-badge fb1"><strong>98%</strong>CSAT Score</div>
+      <div class="float-badge fb2"><strong>50+</strong>Clients Served</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="s-wrap" style="padding: 0 0;">
+    <div class="srv-intro reveal">
+      <span class="s-label">// What I Offer</span>
+      <h2 class="s-title">Services Built for <em>Real Results</em></h2>
+      <div class="s-line"></div>
+      <p style="margin-top: 20px; font-size: 0.82rem; color: var(--muted); line-height: 1.9;">Every service is delivered with precision, professionalism, and a genuine commitment to your business goals.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv-card reveal">
+        <div class="srv-num">01</div>
+        <span class="srv-ico">🎧</span>
+        <div class="srv-name">Customer Support Management</div>
+        <p class="srv-desc">End-to-end handling of customer inquiries across email, live chat, and social media. Fast response times, empathetic communication, and resolution-focused service.</p>
+        <div class="srv-tags"><span class="srv-tag">Email Support</span><span class="srv-tag">Live Chat</span><span class="srv-tag">Ticket Management</span></div>
+      </div>
+      
+      <div class="srv-card reveal" style="transition-delay: 0.1s">
+        <div class="srv-num">02</div>
+        <span class="srv-ico">📅</span>
+        <div class="srv-name">Calendar & Schedule Management</div>
+        <p class="srv-desc">Keeping your calendar organized, conflict-free, and optimized. Scheduling meetings, reminders, travel coordination, and follow-ups handled seamlessly.</p>
+        <div class="srv-tags"><span class="srv-tag">Google Calendar</span><span class="srv-tag">Calendly</span><span class="srv-tag">Scheduling</span></div>
+      </div>
+      <div class="srv-card reveal" style="transition-delay: 0.2s">
+        <div class="srv-num">03</div>
+        <span class="srv-ico">📧</span>
+        <div class="srv-name">Email & Inbox Management</div>
+        <p class="srv-desc">Declutter your inbox, filter important messages, draft professional responses, and maintain organized email folders. Zero inbox stress guaranteed.</p>
+        <div class="srv-tags"><span class="srv-tag">Gmail</span><span class="srv-tag">Outlook</span><span class="srv-tag">Filtering</span></div>
+      </div>
+      <div class="srv-card reveal" style="transition-delay: 0.3s">
+        <div class="srv-num">04</div>
+        <span class="srv-ico">🗂️</span>
+        <div class="srv-name">Data Entry & Research</div>
+        <p class="srv-desc">Accurate data entry, web research, database maintenance, and report preparation. Meticulous attention to detail for clean, reliable records.</p>
+        <div class="srv-tags"><span class="srv-tag">Excel</span><span class="srv-tag">Google Sheets</span><span class="srv-tag">CRM Data</span></div>
+      </div>
+      <div class="srv-card reveal" style="transition-delay: 0.4s">
+        <div class="srv-num">05</div>
+        <span class="srv-ico">💬</span>
+        <div class="srv-name">Virtual Assistance</div>
+        <p class="srv-desc">Responding to comments, DMs, and reviews across platforms. Maintaining a consistent, professional brand voice that builds community and trust.</p>
+        <div class="srv-tags"><span class="srv-tag">Trello</span><span class="srv-tag">Google Workspace</span><span class="srv-tag">Asana</span></div>
+      </div>
+      <div class="srv-card reveal" style="transition-delay: 0.5s">
+        <div class="srv-num">06</div>
+        <span class="srv-ico">⚙️</span>
+        <div class="srv-name">Operations & Admin Support</div>
+        <p class="srv-desc">Document preparation, process documentation, vendor coordination, and general administrative tasks that keep your business running efficiently.</p>
+        <div class="srv-tags"><span class="srv-tag">Notion</span><span class="srv-tag">Slack</span><span class="srv-tag">Trello</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="s-wrap" style="padding: 0;">
+    <div class="reveal">
+      <span class="s-label">// Competencies</span>
+      <h2 class="s-title" style="color: var(--ivory)">Skills & <em>Expertise</em></h2>
+      <div class="s-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="reveal">
+        <div class="skill-group-title">Core Skills</div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Customer Service & Support</span><span class="sk-pct">98%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.98"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Email & Inbox Management</span><span class="sk-pct">96%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.96"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Calendar & Schedule Management</span><span class="sk-pct">95%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.95"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Virtual Assistance</span><span class="sk-pct">88%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.88"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">CRM Management</span><span class="sk-pct">90%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.90"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Data Entry & Research</span><span class="sk-pct">94%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.94"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Social Media Management</span><span class="sk-pct">88%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.88"></div></div>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay: 0.15s">
+        <div class="skill-group-title">Soft Skills</div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Written Communication</span><span class="sk-pct">97%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.97"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Problem Solving</span><span class="sk-pct">93%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.93"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Attention to Detail</span><span class="sk-pct">96%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.96"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Time Management</span><span class="sk-pct">92%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.92"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Conflict Resolution</span><span class="sk-pct">90%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.90"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-top"><span class="sk-name">Adaptability</span><span class="sk-pct">95%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="0.95"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 64px;" class="reveal">
+      <div class="skill-group-title" style="color: rgba(250,248,244,0.6); border-bottom-color: rgba(255,255,255,0.05);">Tools & Platforms</div>
+    </div>
+    <div class="tools-grid reveal">
+      <div class="tool-item"><div class="tool-ico">📬</div><div class="tool-name">Zendesk</div></div>
+      <div class="tool-item"><div class="tool-ico">💼</div><div class="tool-name">HubSpot CRM</div></div>
+      <div class="tool-item"><div class="tool-ico">🎯</div><div class="tool-name">Freshdesk</div></div>
+      <div class="tool-item"><div class="tool-ico">📋</div><div class="tool-name">Notion</div></div>
+      <div class="tool-item"><div class="tool-ico">✅</div><div class="tool-name">Trello</div></div>
+      <div class="tool-item"><div class="tool-ico">💬</div><div class="tool-name">Slack</div></div>
+      <div class="tool-item"><div class="tool-ico">📊</div><div class="tool-name">Google Workspace</div></div>
+      <div class="tool-item"><div class="tool-ico">🗓️</div><div class="tool-name">Calendly</div></div>
+      <div class="tool-item"><div class="tool-ico">🤝</div><div class="tool-name">Intercom</div></div>
+      <div class="tool-item"><div class="tool-ico">📝</div><div class="tool-name">Asana</div></div>
+      <div class="tool-item"><div class="tool-ico">📞</div><div class="tool-name">Zoom</div></div>
+      <div class="tool-item"><div class="tool-ico">🛒</div><div class="tool-name">Shopify Support</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="s-wrap" style="padding: 0;">
+    <div class="reveal">
+      <span class="s-label">// Career History</span>
+      <h2 class="s-title">3 Years of <em>Proven Excellence</em></h2>
+      <div class="s-line"></div>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-sidebar reveal">
+        <p class="exp-tagline">"Every client deserves to feel heard, valued, and helped."</p>
+        <p style="font-size: 0.8rem; color: var(--muted); line-height: 1.9; margin-bottom: 28px;">
+          I bring a calm, solution-first approach to every interaction — turning difficult conversations into loyal customers, and chaos into organized systems.
+        </p>
+        <div class="exp-cert">
+          <div class="cert-lbl">🏆 Certification</div>
+          <div class="cert-name">Team Lead Customer Support Certificate (North Carolina)</div>
+        </div>
+        <div class="exp-cert" style="margin-top: 12px;">
+          <div class="cert-lbl">🏆 Certification</div>
+          <div class="cert-name">HubSpot Customer Support Certification</div>
+        </div>
+        <div class="exp-cert" style="margin-top: 12px;">
+          <div class="cert-lbl">🏆 Certification</div>
+          <div class="cert-name">Zendesk Support Administrator</div>
+        </div>
+      </div>
+      <div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-period">2023 — Present</div>
+          <div class="tl-role">Senior Virtual Assistant & Customer Support Lead</div>
+          <div class="tl-co">Freelance / Multiple Clients · Remote</div>
+          <p class="tl-desc">Managing full-cycle customer support and virtual assistance for 10+ international clients across e-commerce, SaaS, and coaching businesses.</p>
+          <ul class="tl-bullets">
+            <li>Maintained 98% customer satisfaction rate across all client accounts</li>
+            <li>Reduced average ticket response time from 6hrs to under 2hrs</li>
+            <li>Managed inboxes handling 200+ emails/day for multiple executives</li>
+            <li>Built and documented SOPs that reduced onboarding time by 40%</li>
+          </ul>
+        </div>
+        <div class="tl-item" style="transition-delay: 0.15s">
+          <div class="tl-dot"></div>
+          <div class="tl-period">2022 — 2023</div>
+          <div class="tl-role">Customer Support Specialist</div>
+          <div class="tl-co">TechServe Solutions · Remote</div>
+          <p class="tl-desc">Provided tier-1 and tier-2 customer support for a B2B SaaS platform serving over 5,000 users across Africa and Europe.</p>
+          <ul class="tl-bullets">
+            <li>Handled 80–120 support tickets daily via Zendesk and live chat</li>
+            <li>Achieved top agent ranking for 9 consecutive months</li>
+            <li>Trained and onboarded 4 new support agents</li>
+            <li>Collaborated with product team on bug documentation and escalations</li>
+          </ul>
+        </div>
+        <div class="tl-item" style="transition-delay: 0.3s">
+          <div class="tl-dot"></div>
+          <div class="tl-period">2021 — 2022</div>
+          <div class="tl-role">Virtual Assistant & Admin Support</div>
+          <div class="tl-co">Bright Horizons Agency · Remote</div>
+          <p class="tl-desc">Supported multiple executives with scheduling, research, data entry, and client communication as part of a boutique VA agency.</p>
+          <ul class="tl-bullets">
+            <li>Managed calendars and travel for 5 senior executives</li>
+            <li>Processed 1,500+ data records monthly with 99.8% accuracy</li>
+            <li>Drafted professional correspondence and business reports</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="s-wrap" style="padding: 0;">
+    <div class="reveal" style="text-align: center; max-width: 500px; margin: 0 auto;">
+      <span class="s-label">// Client Feedback</span>
+      <h2 class="s-title">What Clients <em>Say</em></h2>
+      <div class="s-line" style="margin: 16px auto 0;"></div>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Olujumoke transformed our customer support operation. Response times improved dramatically and our customer satisfaction scores hit an all-time high within weeks of her joining.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #4f46e5, #0d1b2a);">S</div>
+          <div>
+            <div class="testi-name">Sarah Mitchell</div>
+            <div class="testi-pos">CEO, Luminary eCommerce</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal" style="transition-delay: 0.15s">
+        <div class="stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Working with Olujumoke as my VA has been a game-changer. My inbox is always organized, my calendar runs smoothly, and she anticipates needs before I even voice them.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #c9974a, #0d1b2a);">D</div>
+          <div>
+            <div class="testi-name">David Okonkwo</div>
+            <div class="testi-pos">Founder, DK Consulting</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal" style="transition-delay: 0.3s">
+        <div class="stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p class="testi-text">The level of professionalism, attention to detail, and proactive communication Olujumoke brings is unmatched. She doesn't just complete tasks — she improves processes.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #22c55e, #0d1b2a);">A</div>
+          <div>
+            <div class="testi-name">Amara Johnson</div>
+            <div class="testi-pos">Director of Ops, NovaTech SaaS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY ME -->
+<section id="whyme">
+  <div class="s-wrap" style="padding: 0;">
+    <div class="reveal" style="text-align: center; max-width: 520px; margin: 0 auto;">
+      <span class="s-label">// Why Choose Me</span>
+      <h2 class="s-title" style="color: var(--ivory)">The Difference <em>You'll Feel</em></h2>
+      <div class="s-line" style="margin: 16px auto 0;"></div>
+    </div>
+    <div class="wm-grid">
+      <div class="wm-card reveal">
+        <span class="wm-icon">⚡</span>
+        <div class="wm-title">Fast & Reliable</div>
+        <p class="wm-desc">Same-day responses, consistent availability, and deadlines that are never missed. Your business can count on me.</p>
+      </div>
+      <div class="wm-card reveal" style="transition-delay: 0.1s">
+        <span class="wm-icon">🎯</span>
+        <div class="wm-title">Results-Oriented</div>
+        <p class="wm-desc">I don't just do tasks — I think about outcomes. Every action is aligned to improving your customer experience or efficiency.</p>
+      </div>
+      <div class="wm-card reveal" style="transition-delay: 0.2s">
+        <span class="wm-icon">🔒</span>
+        <div class="wm-title">Discreet & Trustworthy</div>
+        <p class="wm-desc">Handling sensitive data and executive communications with complete confidentiality and professionalism at all times.</p>
+      </div>
+      <div class="wm-card reveal" style="transition-delay: 0.3s">
+        <span class="wm-icon">🌍</span>
+        <div class="wm-title">Remote-Ready</div>
+        <p class="wm-desc">Fully equipped home office, reliable internet, and proficiency with all major remote collaboration tools. Timezone flexible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="s-wrap" style="padding: 0;">
+    <div class="reveal" style="text-align: center; max-width: 500px; margin: 0 auto;">
+      <span class="s-label">// Let's Work Together</span>
+      <h2 class="s-title">Ready to <em>Get Started?</em></h2>
+      <div class="s-line" style="margin: 16px auto 0;"></div>
+    </div>
+    <div class="ct-wrap">
+      <div class="reveal">
+        <div class="ct-info-title">Book a Free Discovery Call</div>
+        <p class="ct-info-desc">Let's discuss your business needs, challenges, and how I can help. No commitment required — just a 30-minute conversation to see if we're a great fit.</p>
+        <div class="ct-detail">
+          <div class="ct-ico">📧</div>
+          <div class="ct-val"><a href="mailto:olujumoke@example.com">jumoke62@gmail.com</a></div>
+        </div>
+        <div class="ct-detail">
+          <div class="ct-ico">📞</div>
+          <div class="ct-val">+234 803 228 8449</div>
+        </div>
+        <div class="ct-detail">
+          <div class="ct-ico">🕐</div>
+          <div class="ct-val">Mon – Fri, 8am – 6pm WAT</div>
+        </div>
+        <div class="ct-detail">
+          <div class="ct-ico">🌍</div>
+          <div class="ct-val">Lagos, Nigeria · Remote Worldwide</div>
+        </div>
+        <div class="ct-socials">
+          <a href="#" class="ct-social" hreflang="linkedin.com/in/olatunji-jumoke-611312326">in</a>
+          <a href="#" class="ct-social">✉</a>
+          <a href="#" class="ct-social">𝕏</a>
+          <a href="#" class="ct-social">📱</a>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay: 0.15s">
+        <div class="ct-form">
+          <div class="form-row">
+            <div class="fg"><label>First Name</label><input type="text" placeholder="Your first name"></div>
+            <div class="fg"><label>Last Name</label><input type="text" placeholder="Your last name"></div>
+          </div>
+          <div class="fg"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+          <div class="fg">
+            <label>Service Needed</label>
+            <select>
+              <option value="">Select a service...</option>
+              <option>Customer Support Management</option>
+              <option>Virtual Assistant Services</option>
+              <option>Email & Inbox Management</option>
+              <option>Calendar Management</option>
+              <option>Data Entry & Research</option>
+              <option>Other / Multiple Services</option>
+            </select>
+          </div>
+          <div class="fg"><label>Tell Me About Your Needs</label><textarea placeholder="Briefly describe what you need help with, your business type, and expected hours per week..."></textarea></div>
+          <button class="submit-btn" id="sbtn">Book a Call →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-inner">
+    <div class="ft-logo">Olu<em>jumoke</em></div>
+    <div class="ft-links">
+      <a href="#services">Services</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="ft-copy">© 2024 Olujumoke Adeyemi. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// LOADER
+var fill = document.getElementById('lfill');
+var pct = 0;
+var interval = setInterval(function(){
+  pct += Math.random() * 18;
+  if(pct >= 100){ pct = 100; clearInterval(interval); setTimeout(function(){ document.getElementById('loader').classList.add('gone'); }, 300); }
+  fill.style.width = pct + '%';
+}, 60);
+
+// NAV SCROLL
+window.addEventListener('scroll', function(){
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// MOBILE MENU
+document.getElementById('burger').addEventListener('click', function(){ document.getElementById('mmenu').classList.add('open'); });
+document.getElementById('mclose').addEventListener('click', function(){ document.getElementById('mmenu').classList.remove('open'); });
+function closeMenu(){ document.getElementById('mmenu').classList.remove('open'); }
+
+// SCROLL REVEAL
+var ro = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); ro.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
+
+// TIMELINE ITEMS
+var tlo = new IntersectionObserver(function(entries){
+  entries.forEach(function(e, i){
+    if(e.isIntersecting){
+      var el = e.target;
+      var delay = parseFloat(el.style.transitionDelay || 0) * 1000;
+      setTimeout(function(){ el.classList.add('on'); }, delay);
+      tlo.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.tl-item').forEach(function(el){ tlo.observe(el); });
+
+// SKILL BARS
+var sbo = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var w = parseFloat(e.target.getAttribute('data-w'));
+      e.target.style.transform = 'scaleX(' + w + ')';
+      e.target.classList.add('on');
+      sbo.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.sk-fill').forEach(function(el){ sbo.observe(el); });
+
+// SUBMIT
+document.getElementById('sbtn').addEventListener('click', function(){
+  this.textContent = '✓ Request Sent! I\'ll be in touch soon.';
+  this.style.background = '#22c55e';
+  this.style.borderColor = '#22c55e';
+  var btn = this;
+  setTimeout(function(){ btn.textContent = 'Book a Call →'; btn.style.background = ''; btn.style.borderColor = ''; }, 4000);
+});
+</script>
+</body>
+</html>
